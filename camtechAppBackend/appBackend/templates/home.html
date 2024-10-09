@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Sample Project</title>
+  </head>
+
+  <body>
+    <H1>Camtech Submissions</H1>
+    <br />
+    <ul>
+      {% for submission in submissions %}
+        <li>{{ submission.name }}</li>
+      {% endfor %}
+    </ul>
+    <br />
+  </body>
+</html>

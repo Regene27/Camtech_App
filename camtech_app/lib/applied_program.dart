@@ -96,8 +96,9 @@ class _AppliedProgramFormState extends State<AppliedProgramForm> {
       return;
     }
 
-    const url = 'http://192.168.3.135:8000/api/submit-form/';
-    var request = http.MultipartRequest('POST', Uri.parse(url));
+    const prod_url = 'https://regene.pythonanywhere.com/api/submit-form/';
+    const dev_url = 'http://192.168.3.135:8000/api/submit-form/';
+    var request = http.MultipartRequest('POST', Uri.parse(prod_url));
 
     request.fields['nameEn'] = widget.nameEn;
     request.fields['nameKh'] = widget.nameKh;
