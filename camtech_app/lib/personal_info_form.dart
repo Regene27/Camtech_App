@@ -5,7 +5,7 @@ import 'dart:convert';
 import 'package:intl/intl.dart'; // For formatting dates
 import 'package:file_picker/file_picker.dart';
 import 'package:path/path.dart' as p; // For getting filename
-import 'form.dart';
+import 'guardian_info_form.dart';
 
 class SubmissionForm extends StatefulWidget {
   @override
@@ -54,52 +54,6 @@ class _SubmissionFormState extends State<SubmissionForm> {
       setState(() {
         idFile = File(result.files.single.path!); // Get the selected file
       });
-    }
-  }
-
-  // Function to submit form data with file to the Django backend
-  Future<void> submitForm() async {
-    if (idFile == null) {
-      ScaffoldMessenger.of(context as BuildContext).showSnackBar(
-        const SnackBar(content: Text('Please upload an ID file')),
-      );
-      return;
-    }
-
-    const url = 'http://192.168.2.149:8000/api/submit-form/';
-    var request = http.MultipartRequest('POST', Uri.parse(url));
-
-    request.fields['nameEn'] = nameEn;
-    request.fields['nameKh'] = nameKh;
-    request.fields['nationality'] = nationality;
-    request.fields['gender'] = gender;
-    request.fields['dob'] = dob;
-    request.fields['pob'] = pob;
-    request.fields['address'] = address;
-    request.fields['country'] = country;
-    request.fields['phone'] = phone;
-    request.fields['email'] = email;
-
-    // Add the file as multipart
-    request.files
-        .add(await http.MultipartFile.fromPath('idFile', idFile!.path));
-
-    try {
-      final response = await request.send();
-      if (response.statusCode == 201) {
-        ScaffoldMessenger.of(context as BuildContext).showSnackBar(
-          const SnackBar(content: Text('Form submitted successfully!')),
-        );
-      } else {
-        ScaffoldMessenger.of(context as BuildContext).showSnackBar(
-          const SnackBar(content: Text('Failed to submit the form.')),
-        );
-      }
-    } catch (e) {
-      print('Error submitting form: $e');
-      ScaffoldMessenger.of(context as BuildContext).showSnackBar(
-        const SnackBar(content: Text('Failed to submit the form.')),
-      );
     }
   }
 

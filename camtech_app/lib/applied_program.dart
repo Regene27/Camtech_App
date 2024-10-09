@@ -2,6 +2,11 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:intl/intl.dart'; // For formatting dates
+import 'package:path/path.dart' as p; // For getting filename
+import 'guardian_info_form.dart';
 
 class AppliedProgramForm extends StatefulWidget {
   final String nameEn,
@@ -29,8 +34,10 @@ class AppliedProgramForm extends StatefulWidget {
       overallGrade,
       mathGrade,
       englishGrade,
+      highSchoolName,
+      provinceCountry,
       ieltsOrToefl;
-  final File? idFile, certificateFile, ieltsOrToeflCertificate;
+  final File? idFile, certificateFile, ieltsOrToeflCertificate, highSchoolId;
 
   const AppliedProgramForm({
     required this.nameEn,
@@ -62,6 +69,9 @@ class AppliedProgramForm extends StatefulWidget {
     required this.certificateFile,
     required this.ieltsOrToefl,
     required this.ieltsOrToeflCertificate,
+    required this.highSchoolName,
+    required this.provinceCountry,
+    required this.highSchoolId,
   });
   @override
   _AppliedProgramFormState createState() => _AppliedProgramFormState();
@@ -76,6 +86,91 @@ class _AppliedProgramFormState extends State<AppliedProgramForm> {
   Set<String>? howDidYouHearAboutUs = {};
   bool? consent;
   bool? declaration;
+
+  // Function to submit form data with file to the Django backend
+  Future<void> submitForm() async {
+    if (widget.idFile == null) {
+      ScaffoldMessenger.of(context as BuildContext).showSnackBar(
+        const SnackBar(content: Text('Please upload an ID file')),
+      );
+      return;
+    }
+
+    const url = 'http://192.168.3.135:8000/api/submit-form/';
+    var request = http.MultipartRequest('POST', Uri.parse(url));
+
+    request.fields['nameEn'] = widget.nameEn;
+    request.fields['nameKh'] = widget.nameKh;
+    request.fields['nationality'] = widget.nationality;
+    request.fields['gender'] = widget.gender;
+    request.fields['dob'] = widget.dob;
+    request.fields['pob'] = widget.pob;
+    request.fields['address'] = widget.address;
+    request.fields['country'] = widget.country;
+    request.fields['phone'] = widget.phone;
+    request.fields['email'] = widget.email;
+    request.fields['guardianName'] = widget.guardianName;
+    request.fields['guardianRelation'] = widget.relationship;
+    request.fields['guardianNationality'] = widget.guardianNationality;
+    request.fields['guardianAddress'] = widget.guardianAddress;
+    request.fields['guardianJob'] = widget.jobPosition;
+    request.fields['guardianPhone'] = widget.guardianPhone;
+    request.fields['currentEducation'] = widget.currentYearOfStudy;
+    request.fields['currentMajor'] = widget.major;
+    request.fields['institutionName'] = widget.institutionName;
+    request.fields['academicYear'] = widget.academicYear;
+    request.fields['schoolName'] = widget.schoolName;
+    request.fields['schoolAddress'] = widget.cityCountry;
+    request.fields['overallGrade'] = widget.overallGrade;
+    request.fields['mathGrade'] = widget.mathGrade;
+    request.fields['englishGrade'] = widget.englishGrade;
+    request.fields['highschoolName'] = widget.highSchoolName;
+    request.fields['highschoolAddress'] = widget.provinceCountry;
+    request.fields['IELTS'] = widget.ieltsOrToefl;
+    request.fields['interestedMajor'] = interestedMajor!;
+    request.fields['requestScholarship'] = scholarship!;
+    request.fields['requestAcademicTerm'] = requestedAcademicTerm!;
+    request.fields['retry'] = retryEntry!;
+    request.fields['knowAboutUs'] = howDidYouHearAboutUs!.join(', ');
+    request.fields['consent'] = consent?.toString() ?? 'false';
+    request.fields['declaration'] = declaration?.toString() ?? 'false';
+
+    if (widget.idFile != null) {
+      request.files.add(
+          await http.MultipartFile.fromPath('idFile', widget.idFile!.path));
+    }
+    if (widget.ieltsOrToeflCertificate != null) {
+      request.files.add(await http.MultipartFile.fromPath(
+          'IELTSCertificate', widget.ieltsOrToeflCertificate!.path));
+    }
+    if (widget.highSchoolId != null) {
+      request.files.add(await http.MultipartFile.fromPath(
+          'highschoolIdFile', widget.highSchoolId!.path));
+    }
+
+    if (widget.certificateFile != null) {
+      request.files.add(await http.MultipartFile.fromPath(
+          'highschoolCertificate', widget.certificateFile!.path));
+    }
+
+    try {
+      final response = await request.send();
+      if (response.statusCode == 201) {
+        ScaffoldMessenger.of(context as BuildContext).showSnackBar(
+          const SnackBar(content: Text('Form submitted successfully!')),
+        );
+      } else {
+        ScaffoldMessenger.of(context as BuildContext).showSnackBar(
+          const SnackBar(content: Text('Failed to submit the form.')),
+        );
+      }
+    } catch (e) {
+      print('Error submitting form: $e');
+      ScaffoldMessenger.of(context as BuildContext).showSnackBar(
+        const SnackBar(content: Text('Failed to submit the form.')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -498,7 +593,7 @@ class _AppliedProgramFormState extends State<AppliedProgramForm> {
                     ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
-                          // Process data.
+                          submitForm();
                         }
                       },
                       child: const Text('Submit'),

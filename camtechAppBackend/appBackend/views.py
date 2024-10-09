@@ -6,6 +6,7 @@ from .serializers import SubmissionSerializer
 import logging
 from django.conf import settings
 from django.http import HttpResponse, Http404
+from rest_framework.parsers import MultiPartParser
 import os
 
 logger = logging.getLogger(__name__)

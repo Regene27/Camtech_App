@@ -32,9 +32,9 @@ class LanguageProficiencyForm extends StatefulWidget {
       overallGrade,
       mathGrade,
       englishGrade,
-      highschoolName,
+      highSchoolName,
       provinceCountry;
-  final File? idFile, certificateFile, highschoolId;
+  final File? idFile, certificateFile, highSchoolId;
 
   const LanguageProficiencyForm({
     required this.nameEn,
@@ -63,10 +63,10 @@ class LanguageProficiencyForm extends StatefulWidget {
     required this.overallGrade,
     required this.mathGrade,
     required this.englishGrade,
-    required this.highschoolName,
+    required this.highSchoolName,
     required this.provinceCountry,
     required this.certificateFile,
-    required this.highschoolId,
+    required this.highSchoolId,
   });
 
   @override
@@ -124,6 +124,9 @@ class _LanguageProficiencyFormState extends State<LanguageProficiencyForm> {
           mathGrade: '',
           englishGrade: '',
           certificateFile: null,
+          highSchoolName: widget.highSchoolName,
+          provinceCountry: widget.provinceCountry,
+          highSchoolId: widget.highSchoolId,
           ieltsOrToefl: ieltsOrToefl ?? '',
           ieltsOrToeflCertificate: ieltsOrToeflCertificate,
         ),

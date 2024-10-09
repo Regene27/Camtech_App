@@ -111,9 +111,9 @@ class _HighSchoolGraduateFormState extends State<HighSchoolGraduateForm> {
             mathGrade: '',
             englishGrade: '',
             certificateFile: null,
-            highschoolName: '',
+            highSchoolName: '',
             provinceCountry: '',
-            highschoolId: null,
+            highSchoolId: null,
           ),
         ),
       );

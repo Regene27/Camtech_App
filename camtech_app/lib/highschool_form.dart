@@ -59,9 +59,9 @@ class HighSchoolForm extends StatefulWidget {
 
 class _HighSchoolFormState extends State<HighSchoolForm> {
   final _formKey = GlobalKey<FormState>();
-  String? highschoolName;
+  String? highSchoolName;
   String? provinceCountry;
-  File? highschoolId;
+  File? highSchoolId;
 
   Future<void> _pickFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -71,7 +71,7 @@ class _HighSchoolFormState extends State<HighSchoolForm> {
 
     if (result != null) {
       setState(() {
-        highschoolId = File(result.files.single.path!); // Get the selected file
+        highSchoolId = File(result.files.single.path!); // Get the selected file
       });
     }
   }
@@ -109,9 +109,9 @@ class _HighSchoolFormState extends State<HighSchoolForm> {
             mathGrade: '',
             englishGrade: '',
             certificateFile: null,
-            highschoolName: highschoolName ?? '',
+            highSchoolName: highSchoolName ?? '',
             provinceCountry: provinceCountry ?? '',
-            highschoolId: highschoolId,
+            highSchoolId: highSchoolId,
           ),
         ),
       );
@@ -148,7 +148,7 @@ class _HighSchoolFormState extends State<HighSchoolForm> {
                     return null;
                   },
                   onSaved: (value) {
-                    highschoolName = value!;
+                    highSchoolName = value!;
                   },
                 ),
                 const Padding(padding: EdgeInsets.only(bottom: 40)),
@@ -185,8 +185,8 @@ class _HighSchoolFormState extends State<HighSchoolForm> {
                 Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Text(highschoolId != null
-                          ? p.basename(highschoolId!.path)
+                      Text(highSchoolId != null
+                          ? p.basename(highSchoolId!.path)
                           : 'No file selected'),
                       ElevatedButton(
                         onPressed: _pickFile,
