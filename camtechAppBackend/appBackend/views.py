@@ -31,16 +31,17 @@ firebase = pyrebase.initialize_app(firebaseConfig)
 authe = firebase.auth()
 database = firebase.database()
 
-db = firestore.client()
 
-cred = credentials.Certificate(
-    "camtech-app-76d33-firebase-adminsdk-of9gr-6e8a0c1ab5.json"
-)
+cred = credentials.Certificate("firebase-key.json")
 firebase_admin.initialize_app(cred)
+
+db = firestore.client()
 
 
 def home(request):
     submissions = database.child("submissions").get().val()
+    if not submissions:
+        submissions = []
     return render(request, "home.html", {"submissions": submissions})
 
 
