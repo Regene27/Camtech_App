@@ -1,3 +1,4 @@
 # .gitignore
 .env
 firebase-key.json
+google-sheets-key.json

@@ -30,13 +30,17 @@ class Submission(models.Model):
     mathGrade = models.CharField(max_length=100, null=True, blank=True)
     englishGrade = models.CharField(max_length=100, null=True, blank=True)
     highschoolCertificate = models.FileField(
-        upload_to="uploads/", null=True, blank=True
+        upload_to="uploads/highschoolCert/", null=True, blank=True
     )
     highschoolName = models.CharField(max_length=100, null=True, blank=True)
     highschoolAddress = models.CharField(max_length=100, null=True, blank=True)
-    highschoolIdFile = models.FileField(upload_to="uploads/", null=True, blank=True)
+    highschoolIdFile = models.FileField(
+        upload_to="uploads/highschoolId/", null=True, blank=True
+    )
     IELTS = models.CharField(max_length=100, null=True, blank=True)
-    IELTSCertificate = models.FileField(upload_to="uploads/", null=True, blank=True)
+    IELTSCertificate = models.FileField(
+        upload_to="uploads/ielts/", null=True, blank=True
+    )
     interestedMajor = models.CharField(max_length=100, null=True, blank=True)
     requestScholarship = models.CharField(max_length=100, null=True, blank=True)
     requestAcademicTerm = models.CharField(max_length=100, null=True, blank=True)
